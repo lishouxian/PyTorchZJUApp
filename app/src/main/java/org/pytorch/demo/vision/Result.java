@@ -24,8 +24,8 @@ public class Result extends AppCompatActivity {
         setContentView(R.layout.activity_result);
 
         Module module = null;
-        Bitmap imageBitmap = (Bitmap) Objects.requireNonNull(getIntent().getBundleExtra("imagedata")).get("data");
-
+        Bitmap imageBitmap = (Bitmap) getIntent().getBundleExtra("imagedata").get("data");
+        System.out.println("读取完成");
         final String moduleFileAbsoluteFilePath = new File(
                 Objects.requireNonNull(Utils.assetFilePath(this, "new.pt"))).getAbsolutePath();
         module = Module.load(moduleFileAbsoluteFilePath);

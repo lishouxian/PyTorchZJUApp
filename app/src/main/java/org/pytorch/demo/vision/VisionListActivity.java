@@ -1,5 +1,5 @@
 package org.pytorch.demo.vision;
-
+import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -12,7 +12,7 @@ import org.pytorch.demo.R;
 
 import java.io.IOException;
 
-public class VisionListActivity extends AbstractListActivity {
+public class VisionListActivity extends AppCompatActivity {
   int cameraRequestCode = 001;
   int cameraRequestCode2 = 002;
   @Override
@@ -28,7 +28,6 @@ public class VisionListActivity extends AbstractListActivity {
     });
 
     findViewById(R.id.take_a_photo).setOnClickListener(v -> {
-
       Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
       startActivityForResult(cameraIntent,cameraRequestCode);
 
@@ -48,7 +47,7 @@ public class VisionListActivity extends AbstractListActivity {
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-    super.onActivityResult(requestCode, resultCode, data);
+    //super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == cameraRequestCode && resultCode == RESULT_OK) {
 
       Intent resultView = new Intent(this, Result.class);
