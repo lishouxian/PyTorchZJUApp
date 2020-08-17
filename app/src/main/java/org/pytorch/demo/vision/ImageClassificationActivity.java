@@ -2,6 +2,8 @@ package org.pytorch.demo.vision;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
@@ -23,6 +25,7 @@ import org.pytorch.demo.vision.view.ResultRowView;
 import org.pytorch.torchvision.TensorImageUtils;
 
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -51,17 +54,20 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
 
     private final String showtext;
     private final Bitmap showbitMap;
-
+    private final Bitmap reallbitMap;
 
     private final String[] topNClassNames;
     private final float[] topNScores;
     private final long analysisDuration;
     private final long moduleForwardDuration;
 
-    public AnalysisResult(String showtext,Bitmap showbitMap, String[] topNClassNames, float[] topNScores,
+    public AnalysisResult(String showtext,Bitmap showbitMap,Bitmap reallbitMap, String[] topNClassNames, float[] topNScores,
                           long moduleForwardDuration, long analysisDuration) {
       this.showtext = showtext;
       this.showbitMap = showbitMap;
+      this.reallbitMap = reallbitMap;
+
+
       this.topNClassNames = topNClassNames;
       this.topNScores = topNScores;
       this.moduleForwardDuration = moduleForwardDuration;
@@ -108,20 +114,7 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
     showText = findViewById(R.id.text);
     imageView = findViewById(R.id.imageView);
 
-    findViewById(R.id.button).setOnClickListener(v -> {
-      Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-      startActivityForResult(cameraIntent,cameraRequestCode);
 
-
-
-    });
-
-    findViewById(R.id.button2).setOnClickListener(v -> {
-      Intent intent = new Intent();
-      intent.setAction(Intent.ACTION_GET_CONTENT);
-      intent.setType("image/*");
-      startActivityForResult(intent, cameraRequestCode2);
-    });
 
   }
 
@@ -140,8 +133,25 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
   @Override
   protected void applyToUiAnalyzeImageResult(AnalysisResult result) {
 
-    showText.setText(result.showtext);
+//    showText.setText(result.showtext);
+    showText.setText("");
     imageView.setImageBitmap(result.showbitMap);
+    findViewById(R.id.button).setOnClickListener(v -> {
+//      Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//      startActivityForResult(cameraIntent,cameraRequestCode);
+      Utils.saveImageToGallery(this,result.showbitMap);
+
+      Utils.saveImageToGallery(this,result.reallbitMap);
+      showText.setText("保存成功！！！！");
+
+    });
+
+    findViewById(R.id.button2).setOnClickListener(v -> {
+      Intent intent = new Intent();
+      intent.setAction(Intent.ACTION_GET_CONTENT);
+      intent.setType("image/*");
+      startActivityForResult(intent, cameraRequestCode2);
+    });
 
   }
   //获取模型
@@ -185,6 +195,7 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
         }
       }
 
+
       final long startTime = SystemClock.elapsedRealtime();
       TensorImageUtils.imageYUV420CenterCropToFloatBuffer(
           image.getImage(), rotationDegrees,
@@ -193,12 +204,15 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
           TensorImageUtils.TORCHVISION_NORM_STD_RGB,
           mInputTensorBuffer, 0);
 
+
+
+
       final long moduleForwardStartTime = SystemClock.elapsedRealtime();
       final Tensor outputTensor = mModule.forward(IValue.from(mInputTensor)).toTensor();
       final long moduleForwardDuration = SystemClock.elapsedRealtime() - moduleForwardStartTime;
 
       final float[] scores = outputTensor.getDataAsFloatArray();
-
+      final float[] scores2 = mInputTensor.getDataAsFloatArray();
 //      final int[] ixs = Utils.topK(scores, TOP_K);
 
       final String[] topKClassNames = new String[TOP_K];
@@ -209,21 +223,25 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
       );
       final String shownum = Float.toString(scores[0]);
       Bitmap test = Bitmap.createBitmap(224, 224, Bitmap.Config.ARGB_8888);
-
+      Bitmap test2 = Bitmap.createBitmap(224, 224, Bitmap.Config.ARGB_8888);
       int[] pixels = new int[224 * 224];
+      int[] pixels2 = new int[256 * 256];
       for (int i = 0; i < 224 * 224; ++i) {
         //关键代码，生产灰度图
         pixels[i] = (int) (scores[i] * 50);
+        pixels2[i] = (int) (scores2[i] * 50);
 
       }
+
       test.setPixels(pixels, 0, 224, 0, 0, 224, 224);
+      test2.setPixels(pixels2, 0, 224, 0, 0, 224, 224);
 //      for (int i = 0; i < TOP_K; i++) {
 //        final int ix = ixs[i];
 //        topKClassNames[i] = Constants.IMAGENET_CLASSES[ix];
 //        topKScores[i] = scores[ix];
 //      }
       final long analysisDuration = SystemClock.elapsedRealtime() - startTime;
-      return new AnalysisResult(shownum,test,topKClassNames, topKScores, moduleForwardDuration, analysisDuration);
+      return new AnalysisResult(shownum,test,test2,topKClassNames, topKScores, moduleForwardDuration, analysisDuration);
     } catch (Exception e) {
       Log.e(Constants.TAG, "Error during image analysis", e);
       mAnalyzeImageErrorState = true;
