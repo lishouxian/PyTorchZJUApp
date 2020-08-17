@@ -30,16 +30,13 @@ public class VisionListActivity extends AbstractListActivity {
     findViewById(R.id.take_a_photo).setOnClickListener(v -> {
       Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
       startActivityForResult(cameraIntent,cameraRequestCode);
-
     });
-
 
     findViewById(R.id.select_a_picture).setOnClickListener(v -> {
       Intent intent = new Intent();
       intent.setAction(Intent.ACTION_GET_CONTENT);
       intent.setType("image/*");
       startActivityForResult(intent, cameraRequestCode2);
-
     });
 
   }

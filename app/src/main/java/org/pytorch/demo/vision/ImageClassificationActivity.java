@@ -1,8 +1,10 @@
 package org.pytorch.demo.vision;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.TextureView;
@@ -97,23 +99,42 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
         .findViewById(R.id.image_classification_texture_view);
   }
 
+  int cameraRequestCode = 001;
+  int cameraRequestCode2 = 002;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     showText = findViewById(R.id.text);
     imageView = findViewById(R.id.imageView);
-//    final ResultRowView headerResultRowView =
-//        findViewById(R.id.image_classification_result_header_row);
-//    headerResultRowView.nameTextView.setText(R.string.image_classification_results_header_row_name);
-//    headerResultRowView.scoreTextView.setText(R.string.image_classification_results_header_row_score);
-//
-//    mResultRowViews[0] = findViewById(R.id.image_classification_top1_result_row);
-//    mResultRowViews[1] = findViewById(R.id.image_classification_top2_result_row);
-//    mResultRowViews[2] = findViewById(R.id.image_classification_top3_result_row);
-//
-//    mFpsText = findViewById(R.id.image_classification_fps_text);
-//    mMsText = findViewById(R.id.image_classification_ms_text);
-//    mMsAvgText = findViewById(R.id.image_classification_ms_avg_text);
+
+    findViewById(R.id.button).setOnClickListener(v -> {
+      Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+      startActivityForResult(cameraIntent,cameraRequestCode);
+
+
+
+    });
+
+    findViewById(R.id.button2).setOnClickListener(v -> {
+      Intent intent = new Intent();
+      intent.setAction(Intent.ACTION_GET_CONTENT);
+      intent.setType("image/*");
+      startActivityForResult(intent, cameraRequestCode2);
+    });
+
+  }
+
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == cameraRequestCode && resultCode == RESULT_OK) {
+      Intent resultView = new Intent(this, Result.class);
+      resultView.putExtra("imagedata",data.getExtras());
+      startActivity(resultView);
+    }
+
   }
 
   @Override
@@ -121,39 +142,9 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
 
     showText.setText(result.showtext);
     imageView.setImageBitmap(result.showbitMap);
-    
-//    mMovingAvgSum += result.moduleForwardDuration;
-//    mMovingAvgQueue.add(result.moduleForwardDuration);
-//    if (mMovingAvgQueue.size() > MOVING_AVG_PERIOD) {
-//      mMovingAvgSum -= mMovingAvgQueue.remove();
-//    }
-//
-//    for (int i = 0; i < TOP_K; i++) {
-//      final ResultRowView rowView = mResultRowViews[i];
-//      rowView.nameTextView.setText(result.topNClassNames[i]);
-//      rowView.scoreTextView.setText(String.format(Locale.US, SCORES_FORMAT,
-//          result.topNScores[i]));
-//      rowView.setProgressState(false);
-//    }
-//
-//    mMsText.setText(String.format(Locale.US, FORMAT_MS, result.moduleForwardDuration));
-//    if (mMsText.getVisibility() != View.VISIBLE) {
-//      mMsText.setVisibility(View.VISIBLE);
-//    }
-//    mFpsText.setText(String.format(Locale.US, FORMAT_FPS, (1000.f / result.analysisDuration)));
-//    if (mFpsText.getVisibility() != View.VISIBLE) {
-//      mFpsText.setVisibility(View.VISIBLE);
-//    }
-//
-//    if (mMovingAvgQueue.size() == MOVING_AVG_PERIOD) {
-//      float avgMs = (float) mMovingAvgSum / MOVING_AVG_PERIOD;
-//      mMsAvgText.setText(String.format(Locale.US, FORMAT_AVG_MS, avgMs));
-//      if (mMsAvgText.getVisibility() != View.VISIBLE) {
-//        mMsAvgText.setVisibility(View.VISIBLE);
-//      }
-//    }
-  }
 
+  }
+  //获取模型
   protected String getModuleAssetName() {
     if (!TextUtils.isEmpty(mModuleAssetName)) {
       return mModuleAssetName;

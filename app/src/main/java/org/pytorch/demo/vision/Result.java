@@ -78,7 +78,7 @@ public class Result extends AppCompatActivity {
             testword.insert(0, scores[i]);
         }
 
-        textView.setText(testword.toString());
+//        textView.setText(testword.toString());
         // showing image on UI
         ImageView imageView1 = findViewById(R.id.image4);
         imageView1.setImageBitmap(test);

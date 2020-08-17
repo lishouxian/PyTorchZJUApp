@@ -6,7 +6,7 @@
     <string name="main_nlp_button">Language</string>
 
     <string name="vision_list_image_classification_button">Image Classification</string>
-    <string name="image_classification_title">Image</string>
+    <string name="image_classification_title">Crack detection</string>
     <string name="image_classification_results_header_row_name">Classification</string>
     <string name="image_classification_results_header_row_score">Score</string>
 
