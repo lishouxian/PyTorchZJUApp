@@ -12,7 +12,7 @@ import org.pytorch.demo.R;
 
 import java.io.IOException;
 
-public class VisionListActivity extends AppCompatActivity {
+public class VisionListActivity extends AbstractListActivity {
   int cameraRequestCode = 001;
   int cameraRequestCode2 = 002;
   @Override
@@ -47,7 +47,7 @@ public class VisionListActivity extends AppCompatActivity {
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-    //super.onActivityResult(requestCode, resultCode, data);
+    super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == cameraRequestCode && resultCode == RESULT_OK) {
 
       Intent resultView = new Intent(this, Result.class);
