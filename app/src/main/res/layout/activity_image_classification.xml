@@ -53,7 +53,8 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
 
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="1.0"
+        android:contentDescription="TODO" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
