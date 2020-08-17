@@ -24,12 +24,26 @@
         android:elevation="1dp"/>
 
     <org.pytorch.demo.ListCardView
-        android:id="@+id/vision_card_resnet_click_area"
+        android:id="@+id/take_a_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/list_content_margin"
         android:elevation="1dp"
         app:descriptionRes="@string/vision_card_resnet_description"
-
         app:titleRes="@string/vision_card_resnet_title" />
+
+    <org.pytorch.demo.ListCardView
+        android:id="@+id/select_a_picture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/list_content_margin"
+        android:elevation="1dp"
+        app:descriptionRes="@string/select_a_picture_description"
+        app:titleRes="@string/select_a_picture_title"
+
+        />
+
+
+
+
 </LinearLayout>
