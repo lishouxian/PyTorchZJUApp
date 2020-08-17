@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@android:color/black"
     android:fitsSystemWindows="true">
-
     <ViewStub
         android:id="@+id/image_classification_texture_view_stub"
         android:layout_width="match_parent"
@@ -30,7 +29,7 @@
 
     <TextView
         android:id="@+id/text"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:background="@null"
         android:text="实时显示"
@@ -40,7 +39,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.64" />
+        app:layout_constraintVertical_bias="0.8" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -52,9 +51,38 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintVertical_bias="1.0"
         android:contentDescription="TODO" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+
+        android:text="@string/take_a_photo_button"
+        android:textColor="#ffffff"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.23"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.92" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:text="@string/select_a_picture_button"
+        android:textColor="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.77"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.92" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
