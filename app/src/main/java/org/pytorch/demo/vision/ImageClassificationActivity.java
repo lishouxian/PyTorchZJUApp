@@ -60,8 +60,6 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
                           long moduleForwardDuration, long analysisDuration) {
       this.showtext = showtext;
       this.showbitMap = showbitMap;
-
-
       this.topNClassNames = topNClassNames;
       this.topNScores = topNScores;
       this.moduleForwardDuration = moduleForwardDuration;

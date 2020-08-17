@@ -46,7 +46,7 @@ public class Result extends AppCompatActivity {
         assert imageBitmap != null;
         imageBitmap = Bitmap.createScaledBitmap(imageBitmap,256,256,false);
 
-        ImageView imageView = findViewById(R.id.image);
+        ImageView imageView = findViewById(R.id.image3);
         imageView.setImageBitmap(imageBitmap);
 
         // preparing input tensor
@@ -80,9 +80,8 @@ public class Result extends AppCompatActivity {
 
         textView.setText(testword.toString());
         // showing image on UI
-        ImageView imageView1 = findViewById(R.id.image2);
+        ImageView imageView1 = findViewById(R.id.image4);
         imageView1.setImageBitmap(test);
-
 
     }
 
