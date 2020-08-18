@@ -42,5 +42,6 @@
     <string name="take_a_photo_button">Take a photo</string>
     <string name="select_a_picture_button">Select a picture</string>
     <string name="Live_button">Live</string>
+    <string name="save">Save</string>
 
 </resources>

@@ -146,13 +146,6 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
 
     });
 
-    findViewById(R.id.button2).setOnClickListener(v -> {
-      Intent intent = new Intent();
-      intent.setAction(Intent.ACTION_GET_CONTENT);
-      intent.setType("image/*");
-      startActivityForResult(intent, cameraRequestCode2);
-    });
-
   }
   //获取模型
   protected String getModuleAssetName() {
