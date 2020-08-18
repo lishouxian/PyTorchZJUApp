@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import org.pytorch.demo.nlp.NLPListActivity;
 import org.pytorch.demo.vision.ImageClassificationActivity;
 import org.pytorch.demo.vision.PhotoUtils;
 import org.pytorch.demo.vision.VisionListActivity;
@@ -84,9 +83,8 @@ public class MainActivity extends AppCompatActivity {
 
     Button btnTakePhoto = (Button) findViewById(R.id.button);
     Button btnTakeGallery = (Button) findViewById(R.id.button2);
+
     photo = (ImageView) findViewById(R.id.image);
-
-
     btnTakePhoto.setOnClickListener(view -> {
       imageUri = Uri.fromFile(photographedFile);
 
@@ -105,9 +103,6 @@ public class MainActivity extends AppCompatActivity {
     btnTakeGallery.setOnClickListener(view -> {
       PhotoUtils.openPic(MainActivity.this, REQUEST_CODE_GALLERY);
     });
-
-
-
   }
 
   @Override
@@ -149,16 +144,6 @@ public class MainActivity extends AppCompatActivity {
           if (bitmap != null) {
             showImages(bitmap);
           }
-
-                    /*
-                    拍照图片、拍照后裁剪所得图片，都已被自动保存在SDCard上，但是打开系统相册时却无法显示。
-                    此处发送广播让MediaScanner扫描制定的文件，在系统相册中就可以找到拍摄的照片了，
-
-                    注意：
-                        打开图库，能看到的只是拍照后裁剪所得照片，拍照原图还是看不到。
-                        且，保存的是最后一次裁剪过的图片，之前裁剪过的图片会被替换。
-                        若要保留每次裁剪后的图片，请在拍照、图库回调后分别调用以下代码。
-                     */
           Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
           intent.setData(cropImageUri);
           sendBroadcast(intent);
@@ -174,36 +159,12 @@ public class MainActivity extends AppCompatActivity {
    */
   private void showImages(Bitmap bitmap) {
     photo.setImageBitmap(bitmap);
-    bitmap = Bitmap.createScaledBitmap(bitmap,256,256,false);
 
-    Module module = null;
-
-    final String moduleFileAbsoluteFilePath = new File(
-            Objects.requireNonNull(Utils.assetFilePath(this, "new.pt"))).getAbsolutePath();
-    module = Module.load(moduleFileAbsoluteFilePath);
+    Bitmap test = Utils.doTytorch(this, bitmap);
 
 
-    final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(bitmap,
-            TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);
-
-    final Tensor outputTensor = module.forward(IValue.from(inputTensor)).toTensor();
-    final float[] scores = outputTensor.getDataAsFloatArray();
-
-    Bitmap test = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
-
-    int[] pixels = new int[256 * 256];
-    for (int i = 0; i < 256 * 256; ++i) {
-      //关键代码，生产灰度图
-      pixels[i] = (int) (scores[i] * 50);
-    }
-
-    test.setPixels(pixels, 0, 256, 0, 0, 256, 256);
     ImageView imageView1 = findViewById(R.id.image2);
     imageView1.setImageBitmap(test);
-
-
-
-
 
   }
 

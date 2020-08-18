@@ -7,12 +7,18 @@ import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
+import org.pytorch.IValue;
+import org.pytorch.Module;
+import org.pytorch.Tensor;
+import org.pytorch.torchvision.TensorImageUtils;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class Utils {
   public static String assetFilePath(Context context, String assetName) {
@@ -92,4 +98,32 @@ public class Utils {
     return false;
   }
 
+
+
+  public static Bitmap doTytorch(Context context, Bitmap bitmap) {
+    bitmap = Bitmap.createScaledBitmap(bitmap,256,256,false);
+
+    Module module = null;
+
+    final String moduleFileAbsoluteFilePath = new File(
+            Objects.requireNonNull(Utils.assetFilePath(context, "new.pt"))).getAbsolutePath();
+    module = Module.load(moduleFileAbsoluteFilePath);
+
+
+    final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(bitmap,
+            TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);
+
+    final Tensor outputTensor = module.forward(IValue.from(inputTensor)).toTensor();
+    final float[] scores = outputTensor.getDataAsFloatArray();
+
+    Bitmap test = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
+
+    int[] pixels = new int[256 * 256];
+    for (int i = 0; i < 256 * 256; ++i) {
+      //关键代码，生产灰度图
+      pixels[i] = (int) (scores[i] * 50);
+    }
+    test.setPixels(pixels, 0, 256, 0, 0, 256, 256);
+    return test;
+  }
 }

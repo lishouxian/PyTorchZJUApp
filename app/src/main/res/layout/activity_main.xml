@@ -7,7 +7,6 @@
     android:background="@android:color/black"
     android:fitsSystemWindows="true"
 
-
     >
 
 
@@ -16,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:background="@null"
-        android:text="实时显示"
+        android:text="Crack detection"
         android:textColor="#ffffff"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
