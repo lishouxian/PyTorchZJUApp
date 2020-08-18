@@ -18,10 +18,18 @@ import org.pytorch.demo.vision.ImageClassificationActivity;
 import org.pytorch.demo.vision.PhotoUtils;
 import org.pytorch.demo.vision.VisionListActivity;
 
+
+import org.pytorch.IValue;
+import org.pytorch.Module;
+import org.pytorch.Tensor;
+import org.pytorch.torchvision.TensorImageUtils;
+
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import java.io.File;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
   private ImageView photo;
@@ -166,6 +174,37 @@ public class MainActivity extends AppCompatActivity {
    */
   private void showImages(Bitmap bitmap) {
     photo.setImageBitmap(bitmap);
+    bitmap = Bitmap.createScaledBitmap(bitmap,256,256,false);
+
+    Module module = null;
+
+    final String moduleFileAbsoluteFilePath = new File(
+            Objects.requireNonNull(Utils.assetFilePath(this, "new.pt"))).getAbsolutePath();
+    module = Module.load(moduleFileAbsoluteFilePath);
+
+
+    final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(bitmap,
+            TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);
+
+    final Tensor outputTensor = module.forward(IValue.from(inputTensor)).toTensor();
+    final float[] scores = outputTensor.getDataAsFloatArray();
+
+    Bitmap test = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
+
+    int[] pixels = new int[256 * 256];
+    for (int i = 0; i < 256 * 256; ++i) {
+      //关键代码，生产灰度图
+      pixels[i] = (int) (scores[i] * 50);
+    }
+
+    test.setPixels(pixels, 0, 256, 0, 0, 256, 256);
+    ImageView imageView1 = findViewById(R.id.image2);
+    imageView1.setImageBitmap(test);
+
+
+
+
+
   }
 
   /**

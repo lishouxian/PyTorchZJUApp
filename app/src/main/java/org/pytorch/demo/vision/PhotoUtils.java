@@ -86,7 +86,6 @@ public class PhotoUtils {
         activity.startActivityForResult(intent, requestCode);
     }
 
-
     /**
      * 读取uri所在的图片
      *
