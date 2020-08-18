@@ -73,7 +73,10 @@ public class Utils {
     File appDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
     String fileName = System.currentTimeMillis() + ".jpg";
-    File file = new File(appDir, fileName);
+    //File file = new File(appDir, fileName);
+
+    File file = new File(Environment.getExternalStorageDirectory().getPath() + "/Crack detection/IMG_" + System.currentTimeMillis() + "set.jpg");
+
     try {
       FileOutputStream fos = new FileOutputStream(file);
       //通过io流的方式来压缩保存图片

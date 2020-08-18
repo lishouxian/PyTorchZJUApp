@@ -208,6 +208,8 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
       final float[] scores2 = mInputTensor.getDataAsFloatArray();
 //      final int[] ixs = Utils.topK(scores, TOP_K);
 
+      //TODO 完成显示校准
+
       final String[] topKClassNames = new String[TOP_K];
       final float[] topKScores = new float[TOP_K];
 

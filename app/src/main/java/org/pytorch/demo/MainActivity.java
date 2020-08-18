@@ -51,11 +51,11 @@ public class MainActivity extends AppCompatActivity {
   /**
    * 拍照所得原图
    */
-  private File photographedFile = new File(Environment.getExternalStorageDirectory().getPath() + "/IMG_" + System.currentTimeMillis() + ".jpg");
+  private File photographedFile = new File(Environment.getExternalStorageDirectory().getPath() + "/Crack detection/IMG_" + System.currentTimeMillis() + ".jpg");
   /**
    * 修剪后的图片
    */
-  private File cropFile = new File(Environment.getExternalStorageDirectory().getPath() + "/IMG_" + System.currentTimeMillis() + "_crop.jpg");
+  private File cropFile = new File(Environment.getExternalStorageDirectory().getPath() + "/Crack detection/IMG_" + System.currentTimeMillis() + "_crop.jpg");
 
 
   /**
