@@ -12,31 +12,31 @@ import org.pytorch.demo.R;
 
 import java.io.IOException;
 
-public class VisionListActivity extends AbstractListActivity {
+public class VisionListActivity extends AppCompatActivity {
   int cameraRequestCode = 001;
   int cameraRequestCode2 = 002;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    findViewById(R.id.vision_card_qmobilenet_click_area).setOnClickListener(v -> {
-      final Intent intent = new Intent(VisionListActivity.this, ImageClassificationActivity.class);
-      intent.putExtra(ImageClassificationActivity.INTENT_MODULE_ASSET_NAME,
-          "new.pt");
-      intent.putExtra(ImageClassificationActivity.INTENT_INFO_VIEW_TYPE,
-          InfoViewFactory.INFO_VIEW_TYPE_IMAGE_CLASSIFICATION_QMOBILENET);
-      startActivity(intent);
+    findViewById(R.id.button3).setOnClickListener(v -> {
+//      final Intent intent = new Intent(VisionListActivity.this, ImageClassificationActivity.class);
+//      intent.putExtra(ImageClassificationActivity.INTENT_MODULE_ASSET_NAME,
+//          "new.pt");
+//      intent.putExtra(ImageClassificationActivity.INTENT_INFO_VIEW_TYPE,
+//          InfoViewFactory.INFO_VIEW_TYPE_IMAGE_CLASSIFICATION_QMOBILENET);
+//      startActivity(intent);
     });
 
-    findViewById(R.id.take_a_photo).setOnClickListener(v -> {
-      Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-      startActivityForResult(cameraIntent,cameraRequestCode);
+    findViewById(R.id.button).setOnClickListener(v -> {
+//      Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//      startActivityForResult(cameraIntent,cameraRequestCode);
     });
 
-    findViewById(R.id.select_a_picture).setOnClickListener(v -> {
-      Intent intent = new Intent();
-      intent.setAction(Intent.ACTION_GET_CONTENT);
-      intent.setType("image/*");
-      startActivityForResult(intent, cameraRequestCode2);
+    findViewById(R.id.button2).setOnClickListener(v -> {
+//      Intent intent = new Intent();
+//      intent.setAction(Intent.ACTION_GET_CONTENT);
+//      intent.setType("image/*");
+//      startActivityForResult(intent, cameraRequestCode2);
     });
 
   }
@@ -58,8 +58,8 @@ public class VisionListActivity extends AbstractListActivity {
 
 
 
-  @Override
-  protected int getListContentLayoutRes() {
-    return R.layout.vision_list_content;
-  }
+//  @Override
+//  protected int getListContentLayoutRes() {
+//    return R.layout.vision_list_content;
+//  }
 }
