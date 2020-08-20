@@ -198,6 +198,10 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
           mInputTensorBuffer, 0);
 
 
+      ByteBuffer buffer = image.getImage().getPlanes()[0].getBuffer();
+      byte[] bytes = new byte[buffer.capacity()];
+      buffer.get(bytes);
+      Bitmap bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);
 
 
       final long moduleForwardStartTime = SystemClock.elapsedRealtime();
