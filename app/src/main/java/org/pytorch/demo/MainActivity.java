@@ -51,11 +51,11 @@ public class MainActivity extends AppCompatActivity {
   /**
    * 拍照所得原图
    */
-  private File photographedFile = new File(Environment.getExternalStorageDirectory().getPath() + "/Crack detection/IMG_" + System.currentTimeMillis() + ".jpg");
+  private File photographedFile = new File(Environment.getExternalStorageDirectory().getPath() + "/Crack detection//IMG/IMG_" + System.currentTimeMillis() + ".jpg");
   /**
    * 修剪后的图片
    */
-  private File cropFile = new File(Environment.getExternalStorageDirectory().getPath() + "/Crack detection/IMG_" + System.currentTimeMillis() + "_crop.jpg");
+  private File cropFile = new File(Environment.getExternalStorageDirectory().getPath() + "/Crack detection//IMG/IMG_" + System.currentTimeMillis() + "_crop.jpg");
 
 
   /**
@@ -162,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
     Bitmap test = Utils.doTytorch(this, bitmap);
 
+    Utils.saveImageToGallery(this,test);
 
     ImageView imageView1 = findViewById(R.id.image2);
     imageView1.setImageBitmap(test);

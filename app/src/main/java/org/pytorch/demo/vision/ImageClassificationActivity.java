@@ -141,7 +141,7 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
 //      startActivityForResult(cameraIntent,cameraRequestCode);
       Utils.saveImageToGallery(this,result.showbitMap);
 
-      Utils.saveImageToGallery(this,result.reallbitMap);
+//      Utils.saveImageToGallery(this,result.reallbitMap);
       showText.setText("保存成功！！！！");
 
     });
@@ -198,39 +198,39 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
           mInputTensorBuffer, 0);
 
 
-      ByteBuffer buffer = image.getImage().getPlanes()[0].getBuffer();
-      byte[] bytes = new byte[buffer.capacity()];
-      buffer.get(bytes);
-      Bitmap bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);
-
-
       final long moduleForwardStartTime = SystemClock.elapsedRealtime();
       final Tensor outputTensor = mModule.forward(IValue.from(mInputTensor)).toTensor();
       final long moduleForwardDuration = SystemClock.elapsedRealtime() - moduleForwardStartTime;
 
       final float[] scores = outputTensor.getDataAsFloatArray();
       final float[] scores2 = mInputTensor.getDataAsFloatArray();
-//      final int[] ixs = Utils.topK(scores, TOP_K);
 
-      //TODO 完成显示校准
 
       final String[] topKClassNames = new String[TOP_K];
       final float[] topKScores = new float[TOP_K];
 
-      System.out.println(
-              scores.length
-      );
+
       final String shownum = Float.toString(scores[0]);
       Bitmap test = Bitmap.createBitmap(224, 224, Bitmap.Config.ARGB_8888);
       Bitmap test2 = Bitmap.createBitmap(224, 224, Bitmap.Config.ARGB_8888);
       int[] pixels = new int[224 * 224];
-      int[] pixels2 = new int[256 * 256];
+      int[] pixels2 = new int[224 * 224];
       for (int i = 0; i < 224 * 224; ++i) {
         //关键代码，生产灰度图
         pixels[i] = (int) (scores[i] * 50);
-        pixels2[i] = (int) (scores2[i] * 50);
 
       }
+      for (int i = 0; i < 224 * 224; i++) {
+        //关键代码，生产灰度图
+        long al = ((int)scores2[i]*50 << 24) & 0xFF000000;
+        long rl = ((int)scores2[i+224*224]*50 << 16) & 0x00FF0000;
+        long gl = ((int)scores2[i+2*224*224]*50 << 8) & 0x0000FF00;
+        long bl = 128 & 0x000000FF;
+
+        pixels2[i] = (int) (al | rl | gl |bl);
+      }
+
+
 
       test.setPixels(pixels, 0, 224, 0, 0, 224, 224);
       test2.setPixels(pixels2, 0, 224, 0, 0, 224, 224);
@@ -239,6 +239,9 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
 //        topKClassNames[i] = Constants.IMAGENET_CLASSES[ix];
 //        topKScores[i] = scores[ix];
 //      }
+
+
+
       final long analysisDuration = SystemClock.elapsedRealtime() - startTime;
       return new AnalysisResult(shownum,test,test2,topKClassNames, topKScores, moduleForwardDuration, analysisDuration);
     } catch (Exception e) {

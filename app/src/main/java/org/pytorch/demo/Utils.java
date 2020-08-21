@@ -13,6 +13,7 @@ import org.pytorch.Tensor;
 import org.pytorch.torchvision.TensorImageUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +23,21 @@ import java.util.Objects;
 
 public class Utils {
   public static String assetFilePath(Context context, String assetName) {
-    File file = new File(context.getFilesDir(), assetName);
+
+    String oldpath = context.getFilesDir() +"/" +assetName;
+    String newpath = Environment.getExternalStorageDirectory().getPath() + "/Crack detection/model/new.pt";
+    System.out.println(oldpath);
+    System.out.println(newpath);
+    //File oldfile = new File(context.getFilesDir(), assetName);
+    File file = new File(Environment.getExternalStorageDirectory().getPath() + "/Crack detection/model/new.pt");
+
+    File creatfilepath = new File(Environment.getExternalStorageDirectory().getPath() + "/Crack detection/model");
+
+    if(!file.exists()){
+      creatfilepath.mkdirs();
+      Utils.copyFile(oldpath,newpath);
+    }
+
     if (file.exists() && file.length() > 0) {
       return file.getAbsolutePath();
     }
@@ -67,7 +82,6 @@ public class Utils {
 
   public static boolean saveImageToGallery(Context context, Bitmap bmp) {
 
-
     // 首先保存图片
 
     File appDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -75,7 +89,13 @@ public class Utils {
     String fileName = System.currentTimeMillis() + ".jpg";
     //File file = new File(appDir, fileName);
 
-    File file = new File(Environment.getExternalStorageDirectory().getPath() + "/Crack detection/IMG_" + System.currentTimeMillis() + "set.jpg");
+    File file = new File(Environment.getExternalStorageDirectory().getPath() + "/Crack detection/IMG/IMG_" + System.currentTimeMillis() + ".jpg");
+    File creatfilepath = new File(Environment.getExternalStorageDirectory().getPath() + "/Crack detection/img");
+
+    if(!creatfilepath.exists()){
+      creatfilepath.mkdirs();
+    }
+
 
     try {
       FileOutputStream fos = new FileOutputStream(file);
@@ -129,4 +149,33 @@ public class Utils {
     test.setPixels(pixels, 0, 256, 0, 0, 256, 256);
     return test;
   }
+
+  //文件复制功能
+  public static void copyFile(String oldPath, String newPath) {
+    try {
+      int bytesum = 0;
+      int byteread = 0;
+      File oldfile = new File(oldPath);
+      if (oldfile.exists()) { //文件存在时
+        InputStream inStream = new FileInputStream(oldPath); //读入原文件
+        FileOutputStream fs = new FileOutputStream(newPath);
+        byte[] buffer = new byte[1444];
+        int length;
+        while ( (byteread = inStream.read(buffer)) != -1) {
+          bytesum += byteread; //字节数 文件大小
+          System.out.println(bytesum);
+          fs.write(buffer, 0, byteread);
+        }
+        inStream.close();
+      }
+    }
+    catch (Exception e) {
+      System.out.println("复制单个文件操作出错");
+      e.printStackTrace();
+
+    }
+
+  }
+
+
 }
