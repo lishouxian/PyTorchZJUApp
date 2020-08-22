@@ -28,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -142,7 +143,11 @@ public class MainActivity extends AppCompatActivity {
         case REQUEST_CODE_CROP:
           Bitmap bitmap = PhotoUtils.getBitmapFromUri(cropImageUri, this);
           if (bitmap != null) {
-            showImages(bitmap);
+            try {
+              showImages(bitmap);
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
           }
           Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
           intent.setData(cropImageUri);
@@ -157,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
   /**
    * 将图片显示ImageView组件
    */
-  private void showImages(Bitmap bitmap) {
+  private void showImages(Bitmap bitmap) throws IOException {
     photo.setImageBitmap(bitmap);
 
     Bitmap test = Utils.doTytorch(this, bitmap);

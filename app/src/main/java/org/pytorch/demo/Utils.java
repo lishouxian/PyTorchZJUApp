@@ -12,12 +12,18 @@ import org.pytorch.Module;
 import org.pytorch.Tensor;
 import org.pytorch.torchvision.TensorImageUtils;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -84,18 +90,24 @@ public class Utils {
 
     // 首先保存图片
 
+    AndroidLocationManager instance = AndroidLocationManager.getInstance(context);
+    instance.startLocation();
+    AndroidLocationManager.LocationResultEntry lastLocationEntry = instance.getLastLocationEntry();
+    String address = lastLocationEntry.getAddress();
+    instance.stop();
+
+
     File appDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
-    String fileName = System.currentTimeMillis() + ".jpg";
+    String fileName = address + System.currentTimeMillis() + ".jpg";
     //File file = new File(appDir, fileName);
-
-    File file = new File(Environment.getExternalStorageDirectory().getPath() + "/Crack detection/IMG/IMG_" + System.currentTimeMillis() + ".jpg");
-    File creatfilepath = new File(Environment.getExternalStorageDirectory().getPath() + "/Crack detection/img");
+    copytext(fileName  + " " + address);
+    File file = new File(Environment.getExternalStorageDirectory().getPath() + "/Crack detection/IMG/" + fileName);
+    File creatfilepath = new File(Environment.getExternalStorageDirectory().getPath() + "/Crack detection/IMG");
 
     if(!creatfilepath.exists()){
       creatfilepath.mkdirs();
     }
-
 
     try {
       FileOutputStream fos = new FileOutputStream(file);
@@ -121,17 +133,12 @@ public class Utils {
     return false;
   }
 
-
-
   public static Bitmap doTytorch(Context context, Bitmap bitmap) {
     bitmap = Bitmap.createScaledBitmap(bitmap,256,256,false);
-
     Module module = null;
-
     final String moduleFileAbsoluteFilePath = new File(
             Objects.requireNonNull(Utils.assetFilePath(context, "new.pt"))).getAbsolutePath();
     module = Module.load(moduleFileAbsoluteFilePath);
-
 
     final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(bitmap,
             TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);
@@ -172,10 +179,37 @@ public class Utils {
     catch (Exception e) {
       System.out.println("复制单个文件操作出错");
       e.printStackTrace();
-
     }
-
   }
 
+  public static void copytext(String string) {
+    //String pathname = "D:\\twitter\\13_9_6\\dataset\\en\\input.txt"; // 绝对路径或相对路径都可以，这里是绝对路径，写入文件时演示相对路径
+    String newpath = Environment.getExternalStorageDirectory().getPath() + "/Crack detection/Location";
+    File writename = new File(newpath, "location.txt"); // 相对路径，如果没有则要建立一个新的output。txt文件
 
+    File creatfilepath = new File(newpath);
+
+    if (!writename.exists()) {
+      try {
+        creatfilepath.mkdirs();
+        writename.createNewFile(); // 创建新文件
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    BufferedWriter out = null;
+    try {
+      out = new BufferedWriter(new OutputStreamWriter(
+              new FileOutputStream(writename, true)));
+      out.write(string + "\r\n");
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        out.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+  }
 }
