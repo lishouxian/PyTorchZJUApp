@@ -134,28 +134,48 @@ public class Utils {
   }
 
   public static Bitmap doTytorch(Context context, Bitmap bitmap) {
-    bitmap = Bitmap.createScaledBitmap(bitmap,256,256,false);
+
     Module module = null;
     final String moduleFileAbsoluteFilePath = new File(
             Objects.requireNonNull(Utils.assetFilePath(context, "new.pt"))).getAbsolutePath();
     module = Module.load(moduleFileAbsoluteFilePath);
+    Bitmap test = Bitmap.createBitmap(256*3, 256*3, Bitmap.Config.ARGB_8888);
+    System.out.println(bitmap.getWidth());
+    //bitmap = Bitmap.createScaledBitmap(bitmap,256,256,false);
+    //Bitmap.createBitmap(bitmap,0,0,256,256);
+    for (int p = 0; p < 3; p++) {
+      for (int q = 0; q < 3; q++) {
+        Bitmap bitmap1 = Bitmap.createBitmap(bitmap,256 * p,256 * q,256,256);
 
-    final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(bitmap,
-            TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);
+        final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(bitmap1,
+                TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);
 
-    final Tensor outputTensor = module.forward(IValue.from(inputTensor)).toTensor();
-    final float[] scores = outputTensor.getDataAsFloatArray();
+        final Tensor outputTensor = module.forward(IValue.from(inputTensor)).toTensor();
+        final float[] scores = outputTensor.getDataAsFloatArray();
 
-    Bitmap test = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
+        int[] pixels = new int[256 * 256];
+        for (int i = 0; i < 256 * 256; ++i) {
+          //关键代码，生产灰度图
+          pixels[i] = (int) (scores[i] * 50);
+        }
+        test.setPixels(pixels, 0, 256, 256 * p,256 * q, 256, 256);
 
-    int[] pixels = new int[256 * 256];
-    for (int i = 0; i < 256 * 256; ++i) {
-      //关键代码，生产灰度图
-      pixels[i] = (int) (scores[i] * 50);
+      }
     }
-    test.setPixels(pixels, 0, 256, 0, 0, 256, 256);
+
     return test;
+
+
+
+
+
+
+
+
+
   }
+
+
 
   //文件复制功能
   public static void copyFile(String oldPath, String newPath) {

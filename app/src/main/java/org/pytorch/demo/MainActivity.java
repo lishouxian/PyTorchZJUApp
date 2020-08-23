@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     //裁剪图片宽高
-    int outputX = 480, outputY = 480;
+    int outputX = 256*3, outputY = 256*3;
 
     if (resultCode == RESULT_OK) {
       switch (requestCode) {
