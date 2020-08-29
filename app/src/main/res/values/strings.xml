@@ -6,7 +6,7 @@
     <string name="main_nlp_button">Language</string>
 
     <string name="vision_list_image_classification_button">Image Classification</string>
-    <string name="image_classification_title">Crack detection</string>
+    <string name="image_classification_title">Crack Detection</string>
     <string name="image_classification_results_header_row_name">Classification</string>
     <string name="image_classification_results_header_row_score">Score</string>
 
@@ -39,9 +39,9 @@
     <string name="error_dialog_text">Sorry there was an error.</string>
     <string name="text_classification_edittext_hint">Something like a reddit comment...</string>
 
-    <string name="take_a_photo_button">Take a photo</string>
-    <string name="select_a_picture_button">Select a picture</string>
-    <string name="Live_button">Live</string>
+    <string name="take_a_photo_button">Photographying</string>
+    <string name="select_a_picture_button">Image Selection</string>
+    <string name="Live_button">Real Time</string>
     <string name="save">Save</string>
 
 </resources>

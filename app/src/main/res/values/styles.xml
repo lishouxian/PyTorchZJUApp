@@ -13,6 +13,20 @@
 
     </style>
 
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+    </style>
+
+    <style name="button" parent="AppBaseTheme">
+    </style>
+
+    <style name="btn_primary" parent="@android:style/Widget.Button">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/btn_primary</item>
+        <item name="android:padding">10dip</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
