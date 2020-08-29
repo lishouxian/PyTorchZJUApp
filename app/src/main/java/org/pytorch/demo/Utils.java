@@ -89,15 +89,18 @@ public class Utils {
   public static boolean saveImageToGallery(Context context, Bitmap bmp) {
 
     // 首先保存图片
+    String address = "无法获取地址";
+    try {
+      AndroidLocationManager instance = AndroidLocationManager.getInstance(context);
+      instance.startLocation();
+      AndroidLocationManager.LocationResultEntry lastLocationEntry = instance.getLastLocationEntry();
+      address = lastLocationEntry.getAddress();
+      instance.stop();
+    }catch (Exception e){
+      System.out.println(e);
+    }
 
-    AndroidLocationManager instance = AndroidLocationManager.getInstance(context);
-    instance.startLocation();
-    AndroidLocationManager.LocationResultEntry lastLocationEntry = instance.getLastLocationEntry();
-    String address = lastLocationEntry.getAddress();
-    instance.stop();
-
-
-    File appDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+//    File appDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
     String fileName = address + System.currentTimeMillis() + ".jpg";
     //File file = new File(appDir, fileName);

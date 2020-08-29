@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import org.pytorch.demo.vision.ImageClassificationActivity;
 import org.pytorch.demo.vision.PhotoUtils;
+import org.pytorch.demo.vision.Result;
 import org.pytorch.demo.vision.VisionListActivity;
 
 
@@ -141,14 +142,24 @@ public class MainActivity extends AppCompatActivity {
           break;
         //裁剪回调
         case REQUEST_CODE_CROP:
+
+          Bundle bundle = new Bundle();
+
+
+          Intent resultView = new Intent(this, Result.class);
+
+          resultView.putExtra("data", cropImageUri);
+          startActivity(resultView);
+
+
           Bitmap bitmap = PhotoUtils.getBitmapFromUri(cropImageUri, this);
-          if (bitmap != null) {
-            try {
-              showImages(bitmap);
-            } catch (IOException e) {
-              e.printStackTrace();
-            }
-          }
+//          if (bitmap != null) {
+//            try {
+//              showImages(bitmap);
+//            } catch (IOException e) {
+//              e.printStackTrace();
+//            }
+//          }
           Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
           intent.setData(cropImageUri);
           sendBroadcast(intent);
@@ -163,14 +174,21 @@ public class MainActivity extends AppCompatActivity {
    * 将图片显示ImageView组件
    */
   private void showImages(Bitmap bitmap) throws IOException {
-    photo.setImageBitmap(bitmap);
 
-    Bitmap test = Utils.doTytorch(this, bitmap);
+    Intent resultView = new Intent(this, Result.class);
 
-    Utils.saveImageToGallery(this,test);
 
-    ImageView imageView1 = findViewById(R.id.image2);
-    imageView1.setImageBitmap(test);
+    resultView.putExtra("imagedata", bitmap);
+    startActivity(resultView);
+
+//    photo.setImageBitmap(bitmap);
+//
+//    Bitmap test = Utils.doTytorch(this, bitmap);
+//
+//    Utils.saveImageToGallery(this,test);
+//
+//    ImageView imageView1 = findViewById(R.id.image2);
+//    imageView1.setImageBitmap(test);
 
   }
 
