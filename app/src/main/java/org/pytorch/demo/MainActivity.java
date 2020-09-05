@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.pytorch.BuildConfig;
 import org.pytorch.demo.vision.ImageClassificationActivity;
 import org.pytorch.demo.vision.PhotoUtils;
 import org.pytorch.demo.vision.Result;
@@ -88,7 +89,13 @@ public class MainActivity extends AppCompatActivity {
 
     photo = (ImageView) findViewById(R.id.image);
     btnTakePhoto.setOnClickListener(view -> {
+
+      File creatfilepath = new File(Environment.getExternalStorageDirectory().getPath() + "/Crack detection/IMG");
+      if(!creatfilepath.exists()){
+        creatfilepath.mkdirs();
+      }
       imageUri = Uri.fromFile(photographedFile);
+
 
       //API 24(7.0)以上
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -103,6 +110,10 @@ public class MainActivity extends AppCompatActivity {
       PhotoUtils.takePicture(MainActivity.this, imageUri, REQUEST_CODE_CAMERA);
     });
     btnTakeGallery.setOnClickListener(view -> {
+      File creatfilepath = new File(Environment.getExternalStorageDirectory().getPath() + "/Crack detection/IMG");
+      if(!creatfilepath.exists()){
+        creatfilepath.mkdirs();
+      }
       PhotoUtils.openPic(MainActivity.this, REQUEST_CODE_GALLERY);
     });
   }
